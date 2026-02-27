@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- STAGE 1 -->
+<div id="stage1" class="container active">
+<div class="countdown-circle" id="timer">3</div>
+<h2>Crafting your special moment...</h2>
+</div>
+
+<!-- STAGE 2 -->
+<div id="stage2" class="container">
+<h2 class="main-title">Happy Birthday 💖</h2>
+<button onclick="nextStage(3)">Start</button>
+</div>
+
+<!-- STAGE 3 -->
+<div id="stage3" class="container">
+<div class="cake-wrapper">
+<div class="cake">
+<div class="layer1"></div>
+<div class="layer2"></div>
+<div class="layer3"></div>
+<div class="candle"></div>
+<div class="flame" id="flame"></div>
+</div>
+</div>
+<button onclick="lightCandle()">Light the Candle</button>
+</div>
+
+<!-- STAGE 4 BALLOONS -->
+<div id="stage4" class="container">
+<h2>Pop the Balloons 🎈</h2>
+<div class="balloon-container">
+<div class="balloon" onclick="burstBalloon(this)">
+<span class="balloon-message">Always with You 💕</span>
+</div>
+<div class="balloon" onclick="burstBalloon(this)">
+<span class="balloon-message">My Dream Girl 🌸</span>
+</div>
+<div class="balloon" onclick="burstBalloon(this)">
+<span class="balloon-message">Keep smiling 😊</span>
+</div>
+<div class="balloon" onclick="burstBalloon(this)">
+<span class="balloon-message">My daily happiness 💖</span>
+</div>
+</div>
+<button onclick="nextStage(5)">See Memories</button>
+</div>
+
+<!-- STAGE 5 PHOTOS -->
+<div id="stage5" class="container">
+<h2>Memories 💕</h2>
+<div class="photo-stack" id="stack">
+<img src="file.jpeg" onclick="sendBack(this)">
+<img src="file1.jpeg" onclick="sendBack(this)">
+<img src="file2.jpeg" onclick="sendBack(this)">
+<img src="file3.jpeg" onclick="sendBack(this)">
+</div>
+<button onclick="location.reload()">Replay</button>
+</div>
+
+<script>
+
+/* STAGE SWITCH */
+function nextStage(n){
+document.querySelectorAll(".container").forEach(c=>c.classList.remove("active"));
+document.getElementById("stage"+n).classList.add("active");
+}
+
+/* COUNTDOWN */
+let count=3;
+let interval=setInterval(()=>{
+document.getElementById("timer").innerText=count;
+count--;
+if(count<0){
+clearInterval(interval);
+nextStage(2);
+}
+},1000);
+
+/* CANDLE */
+function lightCandle(){
+document.getElementById("flame").style.opacity="1";
+setTimeout(()=>nextStage(4),2000);
+}
+
+/* BALLOON */
+function burstBalloon(balloon){
+balloon.classList.add("pop");
+balloon.querySelector(".balloon-message").style.display="block";
+}
+
+/* CONFETTI */
+function createConfetti(){
+for(let i=0;i<80;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"vw";
+c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+c.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(c);
+}
+}
+createConfetti();
+
+/* PHOTO STACK */
+const stack=document.getElementById("stack");
+
+function sendBack(photo){
+
+photo.style.transform += " rotate(20deg) scale(1.08)";
+
+setTimeout(()=>{
+stack.appendChild(photo);
+
+const updatedPhotos = Array.from(stack.children);
+updatedPhotos.forEach((img, index)=>{
+img.style.zIndex = updatedPhotos.length - index;
+});
+
+photo.style.transform="";
+},500);
+
+}
+
+</script>
+
+</body>
+</html>
